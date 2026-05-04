@@ -1,0 +1,44 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg-deep: #041226;
+  --bg-mid: #0b2540;
+  --bg-soft: #e9f4ff;
+  --safe: #19a565;
+  --warn: #d08b0e;
+  --danger: #d63a3a;
+  --ink: #0d1b2a;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  color: var(--ink);
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+  background:
+    radial-gradient(circle at 8% 5%, rgba(52, 149, 255, 0.25), transparent 36%),
+    radial-gradient(circle at 92% 95%, rgba(35, 214, 159, 0.22), transparent 40%),
+    linear-gradient(150deg, var(--bg-deep) 0%, var(--bg-mid) 55%, #143b63 100%);
+}
+
+#root {
+  min-height: 100vh;
+}
+
+body.extension-popup {
+  width: 390px;
+  min-width: 390px;
+  min-height: 600px;
+  overflow-x: hidden;
+}
+
+body.extension-popup #root {
+  width: 390px;
+  min-height: 600px;
+}

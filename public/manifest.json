@@ -1,0 +1,35 @@
+{
+  "manifest_version": 3,
+  "name": "VeriFi-PH",
+  "description": "Detect misleading or panic-inducing social media posts with credibility, fact-check, and legal context.",
+  "version": "1.0.0",
+  "permissions": ["scripting", "storage"],
+  "host_permissions": [
+    "http://localhost:4000/*",
+    "http://127.0.0.1:4000/*",
+    "https://www.facebook.com/*",
+    "https://www.instagram.com/*",
+    "https://twitter.com/*",
+    "https://x.com/*",
+    "https://www.tiktok.com/*",
+    "https://www.youtube.com/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "https://www.facebook.com/*",
+        "https://www.instagram.com/*",
+        "https://twitter.com/*",
+        "https://x.com/*",
+        "https://www.tiktok.com/*",
+        "https://www.youtube.com/*"
+      ],
+      "js": ["content.js"],
+      "run_at": "document_end"
+    }
+  ],
+  "action": {
+    "default_title": "VeriFi-PH",
+    "default_popup": "popup.html"
+  }
+}
