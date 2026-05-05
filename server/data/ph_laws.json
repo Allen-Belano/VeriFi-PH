@@ -1,0 +1,17 @@
+[
+  {
+    "law": "Cybercrime Prevention Act (RA 10175)",
+    "keywords": ["misinformation", "fake news", "cybercrime", "deepfake", "disinformation", "online false"],
+    "explanation": "Posting or sharing false information that causes panic or damage may be covered under the Cybercrime Prevention Act and related provisions."
+  },
+  {
+    "law": "Anti-Fake News Act (proposed)",
+    "keywords": ["fake news", "fabricated", "hoax", "rumor", "false claim"],
+    "explanation": "Content that deliberately spreads fabricated news can be flagged as misinformation and may violate Philippines media standards."
+  },
+  {
+    "law": "Data Privacy Act (RA 10173)",
+    "keywords": ["personal data", "privacy", "leaked", "doxxing", "identifiable"],
+    "explanation": "Sharing unverified personal data or sensitive information without consent may violate the Data Privacy Act."
+  }
+]
