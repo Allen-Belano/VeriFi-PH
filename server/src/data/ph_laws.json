@@ -1,0 +1,44 @@
+[
+  {
+    "law": "Cybercrime Prevention Act of 2012 (RA 10175)",
+    "keywords": ["cyber libel", "online libel", "false information", "misinformation", "fake news", "disinformation", "deepfake", "spread false", "unverified claim", "panic", "public alarm"],
+    "explanation": "Spreading false information online that causes panic, threatens public order, or damages someone's reputation may be punishable under RA 10175 (Cybercrime Prevention Act). Penalties include fines and imprisonment up to 12 years depending on the offense.",
+    "risk_level": "high",
+    "penalty": "Imprisonment: 6 years 1 day to 12 years, or fine up to ₱1,000,000"
+  },
+  {
+    "law": "Revised Penal Code – Article 154 (False News)",
+    "keywords": ["false news", "unlawful publication", "fake report", "fabricated story", "hoax", "rumor causing panic", "alarm"],
+    "explanation": "Publishing or spreading false news that may endanger public order or cause damage to the interest of the state is penalized under Article 154 of the Revised Penal Code.",
+    "risk_level": "medium",
+    "penalty": "Arresto mayor (1 month and 1 day to 6 months) and fine up to ₱200,000"
+  },
+  {
+    "law": "Revised Penal Code – Article 353 (Libel)",
+    "keywords": ["libel", "defamation", "false accusation", "reputation damage", "malicious", "slander", "insult"],
+    "explanation": "Public and malicious imputation of a crime, vice, or defect that causes dishonor or discredit to a person may be considered libel under the Revised Penal Code. Cyber libel is covered under RA 10175 with heavier penalties.",
+    "risk_level": "high",
+    "penalty": "Imprisonment: 6 months to 4 years, or fine up to ₱1,200,000 (higher for cyber libel)"
+  },
+  {
+    "law": "Data Privacy Act of 2012 (RA 10173)",
+    "keywords": ["personal data", "privacy", "doxxing", "leaked information", "identifiable", "sensitive information", "personal information", "data breach", "unconsented sharing"],
+    "explanation": "Sharing someone's personal or sensitive information without consent – especially as part of a fake news campaign – may violate the Data Privacy Act. This includes posting addresses, IDs, photos, or private messages.",
+    "risk_level": "medium",
+    "penalty": "Imprisonment: 1 to 6 years, and fine from ₱500,000 to ₱5,000,000"
+  },
+  {
+    "law": "Bayanihan to Heal as One Act (RA 11469) – Emergency Misinformation",
+    "keywords": ["health emergency", "pandemic", "covid", "disaster", "typhoon", "evacuation", "official advisory", "panic buying", "emergency hoax"],
+    "explanation": "During declared national emergencies (e.g., pandemics, natural disasters), spreading false information that causes panic, hoarding, or endangers public health and safety is punishable under special laws like the Bayanihan Act.",
+    "risk_level": "high",
+    "penalty": "Imprisonment: up to 2 months, or fine up to ₱1,000,000, or both"
+  },
+  {
+    "law": "SIM Registration Act (RA 11934) – Accountability",
+    "keywords": ["anonymous", "burner sim", "fake account", "unregistered sim", "disposable number"],
+    "explanation": "Fake news spread using unregistered SIM cards or anonymous accounts may be traced, and offenders can face legal action under the SIM Registration Act, which requires all mobile numbers to be verified.",
+    "risk_level": "low",
+    "penalty": "Fines up to ₱300,000 and imprisonment up to 6 months for violations"
+  }
+]

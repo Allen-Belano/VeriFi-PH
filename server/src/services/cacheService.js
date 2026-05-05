@@ -1,5 +1,5 @@
 const NodeCache = require('node-cache');
-const { cacheTtlSeconds } = require('../config');
+const { cacheTtlSeconds } = require('../config/config');
 
 const cache = new NodeCache({ stdTTL: cacheTtlSeconds, checkperiod: 120 });
 

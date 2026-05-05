@@ -3,7 +3,7 @@ const {
   CLOUDFLARE_ACCOUNT_ID,
   CLOUDFLARE_API_TOKEN,
   CLOUDFLARE_AI_GATEWAY,
-} = require('../config');
+} = require('../config/config');
 
 const baseUrl = CLOUDFLARE_AI_GATEWAY ||
   `https://api.cloudflare.com/client/v4/accounts/${CLOUDFLARE_ACCOUNT_ID}/workers/ai`;

@@ -1,5 +1,5 @@
 const rateLimit = require('express-rate-limit');
-const { rateLimitWindowMs, rateLimitMaxRequests } = require('../config');
+const { rateLimitWindowMs, rateLimitMaxRequests } = require('../config/config');
 
 module.exports = rateLimit({
   windowMs: rateLimitWindowMs,

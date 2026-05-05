@@ -3,7 +3,7 @@ const cors = require('cors');
 const helmet = require('helmet');
 const compression = require('compression');
 
-const { port, nodeEnv } = require('./config');
+const { port, nodeEnv } = require('./config/config');
 const errorHandler = require('./middleware/errorHandler');
 const requestLogger = require('./middleware/requestLogger');
 const rateLimiter = require('./middleware/rateLimiter');
