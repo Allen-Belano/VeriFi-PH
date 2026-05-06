@@ -20,6 +20,32 @@ function getCacheKey(url) {
   return `analyze:${url}`;
 }
 
+function buildFallbackContent(url, reason) {
+  let host = 'Unknown source';
+  let pathname = '';
+
+  try {
+    const parsed = new URL(url);
+    host = parsed.hostname;
+    pathname = parsed.pathname;
+  } catch (error) {
+    // Keep defaults when URL parsing fails unexpectedly.
+  }
+
+  const mediaHint = /\.(jpg|jpeg|png|gif|webp|bmp|svg|mp4|webm|mov|m4v)(\?|$)/i.test(url)
+    ? 'The link appears to point to direct media.'
+    : 'The link may require login or block automated access.';
+
+  return {
+    title: `Limited analysis for ${host}`,
+    excerpt: reason,
+    text: `Limited analysis only. ${mediaHint} URL: ${url} Path: ${pathname || '/'}`,
+    content_html: '',
+    images: [],
+    videos: [],
+  };
+}
+
 async function analyzeUrl(req, res, next) {
   try {
     const { url } = req.body || {};
@@ -37,8 +63,20 @@ async function analyzeUrl(req, res, next) {
       return res.status(200).json({ ...cachedResult, cache_hit: true });
     }
 
-    const html = await fetchHTML(url);
-    const content = extractMainContent(html, url);
+    let content;
+    let fetchWarning = null;
+
+    try {
+      const html = await fetchHTML(url);
+      content = extractMainContent(html, url);
+    } catch (fetchError) {
+      if (fetchError.code !== 'URL_UNREACHABLE') {
+        throw fetchError;
+      }
+
+      fetchWarning = fetchError.message || 'Source could not be fetched. Proceeding with limited analysis.';
+      content = buildFallbackContent(url, fetchWarning);
+    }
 
     if (!content.text && content.images.length === 0 && content.videos.length === 0) {
       const error = new Error('No text or media could be extracted from the URL');
@@ -85,6 +123,7 @@ async function analyzeUrl(req, res, next) {
       legal_insights: legalInsights,
       explanation,
       disclaimer: 'This does not constitute legal advice.',
+      fetch_warning: fetchWarning,
       cache_hit: false,
       processing_time_ms: Date.now() - req.startTime,
     };

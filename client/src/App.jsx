@@ -5,6 +5,40 @@ import ShareWarningModal from './components/ShareWarningModal';
 import LivePostForm from './components/LivePostForm';
 import { io } from 'socket.io-client';
 
+function buildPostFromAnalysis(payload) {
+  const credibilityScore = Number(payload?.credibility_score ?? 0);
+  const sourceUrl = payload?.url || '';
+  const aiProbabilityRaw = Number(payload?.ai_detection?.overall_probability ?? 0);
+  const aiProbability = aiProbabilityRaw > 1 ? aiProbabilityRaw / 100 : aiProbabilityRaw;
+  const authenticityScore = Math.max(0, Math.min(100, Math.round((1 - aiProbability) * 100)));
+
+  return {
+    id: `analysis-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+    user: 'Verified Link',
+    platform: sourceUrl ? new URL(sourceUrl).hostname.replace('www.', '') : 'web',
+    content: payload?.explanation || payload?.fact_check?.summary || sourceUrl,
+    sourceUrl,
+    credibilityScore,
+    legitimacyScore: credibilityScore,
+    authenticityScore,
+    isFlagged: credibilityScore < 40,
+    reason: payload?.verdict || payload?.credibility_label || 'No verdict provided',
+    factCheck: payload?.fact_check?.summary || payload?.fact_check?.sources?.[0]?.verdict || 'No fact-check summary available',
+    law: payload?.legal_insights?.[0]?.law_title || 'No direct legal match',
+    lawExplanation: payload?.legal_insights?.[0]?.explanation || 'No additional legal context available.',
+    riskLevel: payload?.risk_classification?.label || 'unknown',
+    explanation: payload?.explanation || 'No analysis explanation available.',
+    fetchWarning: payload?.fetch_warning || null,
+    platformMetrics: {
+      likes: 0,
+      comments: 0,
+      shares: 0,
+      totalEngagement: 0,
+      isVerified: false,
+    },
+  };
+}
+
 function App() {
   const [posts, setPosts] = useState([]);
   const socketRef = useRef(null);
@@ -48,7 +82,7 @@ function App() {
     const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:4000';
     setIsVerifying(true);
     try {
-      const res = await fetch(`${backendUrl}/verify-link`, {
+      const res = await fetch(`${backendUrl}/api/v1/analyze`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ url }),
@@ -56,15 +90,18 @@ function App() {
 
       const payload = await res.json();
       if (!res.ok) {
-        throw new Error(payload.error || 'Unable to verify link');
+        throw new Error(payload.message || payload.error || 'Unable to verify link');
       }
 
+      const newPost = buildPostFromAnalysis(payload);
+      setPosts((prev) => [newPost, ...prev].slice(0, 100));
+
       setStatusText('Link verified successfully. Analysis has been added to the feed.');
-      return { ok: true, post: payload };
+      return { ok: true, post: newPost };
     } catch (err) {
       const isNetworkError = err instanceof TypeError && /failed to fetch/i.test(err.message || '');
       const message = isNetworkError
-        ? 'Cannot reach verifier backend at http://localhost:4000. Start it with: npm run dev-backend'
+        ? 'Cannot reach verifier backend at http://localhost:4000. Start it with: npm run dev'
         : err?.message || 'Unable to verify this link right now.';
       setStatusText(message);
       return { ok: false, error: message };

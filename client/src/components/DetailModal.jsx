@@ -16,7 +16,10 @@ function DetailModal({ post, onClose }) {
     return null;
   }
 
-  const metrics = post.platformMetrics || {};
+  const paragraphs = (post.explanation || post.content || '')
+    .split(/\n\n|\.|\n/)
+    .map((p) => p.trim())
+    .filter(Boolean);
 
   return (
     <div className="fixed inset-0 z-40 flex items-end justify-center bg-slate-900/60 p-3 backdrop-blur-sm sm:items-center sm:p-6">
@@ -28,7 +31,6 @@ function DetailModal({ post, onClose }) {
             </p>
             <h2 className="font-display text-xl font-bold text-slate-900">
               {post.user}
-              {metrics.isVerified && <span className="ml-2 text-blue-600">✓</span>}
             </h2>
           </div>
           <button
@@ -39,10 +41,6 @@ function DetailModal({ post, onClose }) {
             Close
           </button>
         </header>
-
-        <p className="mb-4 rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm text-slate-700">
-          {post.content}
-        </p>
 
         {post.sourceUrl ? (
           <a
@@ -55,59 +53,20 @@ function DetailModal({ post, onClose }) {
           </a>
         ) : null}
 
-        <div className="grid gap-3">
+        <div className="grid gap-4">
           <CredibilityScore score={post.credibilityScore} reason={post.reason} />
 
-          <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
-            <h3 className="font-display text-base font-semibold text-slate-900">
-              📊 Real Platform Metrics
-            </h3>
-            <div className="mt-3 grid grid-cols-2 gap-2 text-sm">
-              <div className="flex justify-between">
-                <span className="text-slate-600">Likes:</span>
-                <span className="font-semibold text-slate-900">{metrics.likes || 0}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-slate-600">Comments:</span>
-                <span className="font-semibold text-slate-900">{metrics.comments || 0}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-slate-600">Shares:</span>
-                <span className="font-semibold text-slate-900">{metrics.shares || 0}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-slate-600">Total Engagement:</span>
-                <span className="font-semibold text-slate-900">{metrics.totalEngagement || 0}</span>
-              </div>
-              {metrics.retweets !== undefined && (
-                <div className="flex justify-between">
-                  <span className="text-slate-600">Retweets:</span>
-                  <span className="font-semibold text-slate-900">{metrics.retweets || 0}</span>
-                </div>
-              )}
-              {metrics.replies !== undefined && (
-                <div className="flex justify-between">
-                  <span className="text-slate-600">Replies:</span>
-                  <span className="font-semibold text-slate-900">{metrics.replies || 0}</span>
-                </div>
-              )}
-            </div>
-            {metrics.isVerified && (
-              <p className="mt-3 rounded-lg bg-blue-50 px-2 py-1 text-xs font-semibold text-blue-700">
-                ✓ Verified Account
-              </p>
-            )}
-          </div>
+          <section className="rounded-xl border border-slate-200 bg-slate-50 p-4">
+            <h3 className="font-display text-base font-semibold text-slate-900">Summary</h3>
+            <p className="mt-2 text-sm text-slate-700">{post.content}</p>
+          </section>
 
-          <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
-            <h3 className="font-display text-base font-semibold text-slate-900">
-              🔍 Fact Check
-            </h3>
+          <section className="rounded-xl border border-slate-200 bg-slate-50 p-4">
+            <h3 className="font-display text-base font-semibold text-slate-900">Fact Check</h3>
             <p className="mt-2 text-sm text-slate-700">
-              Verdict:{' '}
-              <span className="font-semibold text-slate-900">{post.factCheck}</span>
+              Verdict: <span className="font-semibold text-slate-900">{post.factCheck}</span>
             </p>
-          </div>
+          </section>
 
           <LegalInsight
             law={post.law}
@@ -115,12 +74,14 @@ function DetailModal({ post, onClose }) {
             riskLevel={post.riskLevel}
           />
 
-          <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
-            <h3 className="font-display text-base font-semibold text-slate-900">
-              💬 Analysis
-            </h3>
-            <p className="mt-2 text-sm text-slate-700">{post.explanation}</p>
-          </div>
+          <section className="rounded-xl border border-slate-200 bg-slate-50 p-4">
+            <h3 className="font-display text-base font-semibold text-slate-900">Analysis</h3>
+            <div className="mt-2 text-sm text-slate-700 space-y-2">
+              {paragraphs.map((p, i) => (
+                <p key={i}>{p}</p>
+              ))}
+            </div>
+          </section>
         </div>
       </div>
     </div>
