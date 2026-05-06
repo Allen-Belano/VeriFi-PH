@@ -1,4 +1,4 @@
-function generateExplanation({ title, excerpt, aiDetection, sentiment, factCheck, legalInsights, credibilityScore, verdict }) {
+function generateExplanation({ title, excerpt, aiDetection, multimodalAiDetection, sentiment, factCheck, legalInsights, credibilityScore, verdict }) {
   const explanationLines = [
     `This analysis scored the content at ${credibilityScore}/100, resulting in a verdict of ${verdict}.`,
   ];
@@ -12,8 +12,14 @@ function generateExplanation({ title, excerpt, aiDetection, sentiment, factCheck
   }
 
   explanationLines.push(
-    `AI detection indicates ${aiDetection.text.is_ai ? 'AI-generated text' : 'human-like text'} with ${aiDetection.text.confidence}% confidence.`
+    `AI text detection indicates ${aiDetection.text.is_ai ? 'AI-generated text' : 'human-like text'} with ${aiDetection.text.confidence}% confidence.`
   );
+
+  if (multimodalAiDetection) {
+    explanationLines.push(
+      `Multimodal AI risk is ${multimodalAiDetection.overall_probability}% (${multimodalAiDetection.overall_level}) across text, image, and video signals.`
+    );
+  }
 
   if (sentiment && sentiment.label) {
     explanationLines.push(`Sentiment analysis found ${sentiment.label.toLowerCase()} tone.`);

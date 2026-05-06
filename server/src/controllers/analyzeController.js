@@ -5,6 +5,7 @@ const factCheckService = require('../services/factCheckService');
 const legalEngine = require('../services/legalEngine');
 const credibilityScorer = require('../services/credibilityScorer');
 const explanationGenerator = require('../services/explanationGenerator');
+const mediaAIDetector = require('../services/mediaAIDetector');
 
 function isValidUrl(value) {
   if (!value || typeof value !== 'string') return false;
@@ -93,8 +94,14 @@ async function analyzeUrl(req, res, next) {
       legalEngine.matchLaws(`${content.title} ${content.excerpt} ${content.text}`),
     ]);
 
+    const multimodalAiDetection = await mediaAIDetector.detectAIGeneratedContent({
+      sourceUrl: url,
+      content,
+      aiTextProbability: aiDetection.overall_probability,
+    });
+
     const credibility = credibilityScorer.computeScore({
-      aiProbability: aiDetection.overall_probability,
+      aiProbability: multimodalAiDetection.overall_probability,
       factCheckVerdict: factCheck.sources?.[0]?.verdict || factCheck.summary,
       sentimentScore: sentiment.score,
       sourceUrl: url,
@@ -104,6 +111,7 @@ async function analyzeUrl(req, res, next) {
       title: content.title,
       excerpt: content.excerpt,
       aiDetection,
+      multimodalAiDetection,
       sentiment,
       factCheck,
       legalInsights,
@@ -117,6 +125,7 @@ async function analyzeUrl(req, res, next) {
       credibility_label: credibility.label,
       verdict: credibility.verdict,
       ai_detection: aiDetection,
+      ai_multimodal_detection: multimodalAiDetection,
       sentiment,
       risk_classification: riskClassification,
       fact_check: factCheck,

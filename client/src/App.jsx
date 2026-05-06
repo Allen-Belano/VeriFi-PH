@@ -8,7 +8,7 @@ import { io } from 'socket.io-client';
 function buildPostFromAnalysis(payload) {
   const credibilityScore = Number(payload?.credibility_score ?? 0);
   const sourceUrl = payload?.url || '';
-  const aiProbabilityRaw = Number(payload?.ai_detection?.overall_probability ?? 0);
+  const aiProbabilityRaw = Number(payload?.ai_multimodal_detection?.overall_probability ?? payload?.ai_detection?.overall_probability ?? 0);
   const aiProbability = aiProbabilityRaw > 1 ? aiProbabilityRaw / 100 : aiProbabilityRaw;
   const authenticityScore = Math.max(0, Math.min(100, Math.round((1 - aiProbability) * 100)));
 
@@ -29,6 +29,7 @@ function buildPostFromAnalysis(payload) {
     riskLevel: payload?.risk_classification?.label || 'unknown',
     explanation: payload?.explanation || 'No analysis explanation available.',
     fetchWarning: payload?.fetch_warning || null,
+    aiDetectionBreakdown: payload?.ai_multimodal_detection || null,
     platformMetrics: {
       likes: 0,
       comments: 0,
